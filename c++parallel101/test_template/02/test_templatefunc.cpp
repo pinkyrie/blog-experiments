@@ -1,23 +1,25 @@
 #include <climits>
 #include<iostream>
+#include <limits>
 //
 // Created by Matoka on 2024/11/8.
 //
-template<int N> // template param used as the metafctn param
-struct absTest {
-    static_assert(N != INT_MIN); // C++17-style guard
-    static constexpr auto value = (N < 0) ? -N : N; // “return”
-};
-// 对比template struct和单纯的constexpr function
-// 使用示例 (a metafunction call):
-// Metafunction arg(s) are supplied as the template’s arg(s).
-// “Call” syntax is a request for the template’s published value.
+
+
+// constexpr 绝对值函数
+constexpr int abs(int N) {
+    // C++17 风格的 guard，用来处理最小值的情况
+    static_assert(N != std::numeric_limits<int>::min(), "Value cannot be INT_MIN");
+    return (N < 0) ? -N : N;
+}
 
 int main() {
-    int const n = absTest<5>::value; // could instead declare as constexpr
-    int const m = absTest<-10>::value;
-    // abs<-2147483648>::value; // This would trigger the static_assert
-    std::cout << n << std::endl;
-    std::cout << m << std::endl;
+    constexpr int n = abs(5);      // 可以作为编译时常量
+    constexpr int m = abs(-10);    // 同样支持负值的编译时常量计算
+    // constexpr int p = abs(std::numeric_limits<int>::min()); // 会触发 static_assert
+
+    std::cout << n << std::endl;   // 输出: 5
+    std::cout << m << std::endl;   // 输出: 10
+
     return 0;
 }

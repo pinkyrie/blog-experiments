@@ -10,3 +10,4 @@ int main() {
 	auto m = ::max(4, 7.2); // OK, but type of first argument defines return type
 	cout << m << endl;
 }
+// 7

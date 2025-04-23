@@ -32,9 +32,22 @@ public:
     //     return ans;
     // }
     int longestValidParentheses(string s) {
+        // ))
         stack<int> st;
         int ans = 0;
-
+        st.push(-1);
+       for(int i = 0; i < s.length(); ++i) {
+            if (s[i] == '(') {
+                st.push(i);
+            } else {
+                st.pop();
+                if (st.empty()) {
+                    st.push(i);
+                } else {
+                    ans = std::max(ans, i - st.top());
+                }
+            }
+        }
         return ans;
     }
 };
@@ -42,7 +55,7 @@ public:
 
 int main() {
     Solution test;
-    string s = "(()())";
+    string s = "))";
     auto res = test.longestValidParentheses(s);
     cout << "res: " << res << endl;
 }

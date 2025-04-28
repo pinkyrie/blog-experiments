@@ -1,28 +1,32 @@
 #include <iostream>
-#include <chrono>  // 用于记录时间
+#include <chrono>  // 用于记录运行时间
 
-using namespace std;
+const int X = 5;
+int memo[X+1];
 
 int f(int x) {
+    if (memo[x] != -1) return memo[x];
     if (x <= 2) return 1;
-    else return f(x-1) + f(x-2);
+    else return memo[x] = f(x-1) + f(x-2);
 }
 
 int main() {
-    int n = 20;  // 测试的 Fibonacci 数列的项
+    // 初始化 memo 数组
+    for (int i = 0; i <= X; i++) memo[i] = -1;
 
     // 记录开始时间
-    auto start = chrono::high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
 
-    // 调用递归方法
-    int result = f(n);
+    // 计算答案
+    int ans = f(X);
 
     // 记录结束时间
-    auto end = chrono::high_resolution_clock::now();
-    chrono::duration<double> duration = end - start;
+    auto end = std::chrono::high_resolution_clock::now();
 
-    cout << "F(" << n << ") = " << result << endl;
-    cout << "Execution Time: " << duration.count() << " seconds" << endl;
+    // 计算并输出运行时间
+    std::chrono::duration<double> duration = end - start;
+    std::cout << "答案: " << ans << std::endl;
+    std::cout << "运行时间: " << duration.count() << " 秒" << std::endl;
 
     return 0;
 }

@@ -10,32 +10,46 @@
 using namespace std;
 class Solution {
 private:
-    void dfs(vector<int>& nums, int target, int sum, int index, int& count) {
-        if(index == nums.size()) {
-            if(sum == target) {
-                count += 1;
-            }
+    void dfs(const string & digits,  const unordered_map<int, string> &phoneMap,
+        int idx, string & current_group, vector<string> &result) {
+        cout <<"idx:" << idx << "digits size:" <<  digits.size() << endl;
+
+        if(idx == digits.size()) {
+            result.push_back(current_group);
             return;
         }
-        dfs(nums, target, sum + nums[index], index + 1, count);
-        dfs(nums, target, sum - nums[index], index + 1, count);
+        int digit = digits[idx] - '0';
+        cout << "digit:" << digit << endl;
+        string letters = phoneMap.at(digit);
+        for (char letter : letters) {
+            current_group.push_back(letter);
+            dfs(digits, phoneMap, idx + 1, current_group, result);
+            current_group.pop_back(); // backtrack
+        }
     }
 public:
-    int findTargetSumWays(vector<int>& nums, int target) {
-        int count = 0;
-        int idx = 0;
-        int sum = 0;
-        dfs(nums, target, sum,idx,count);
-        return count;
+    vector<string> letterCombinations(string digits) {
+        unordered_map<int,string> phoneMap = {
+            {2, "abc"}, {3, "def"}, {4, "ghi"}, {5, "jkl"},
+            {6, "mno"}, {7, "pqrs"}, {8, "tuv"}, {9, "wxyz"}
+        };
+        vector<string> result;
+        if (digits.empty()) {
+            return result;
+        }
+        string combination = "";
+        dfs(digits, phoneMap, 0, combination, result);
+        return result;
+
     }
 };
 
 
-
 int main() {
     Solution test;
-    vector<int> nums = {1,1,1,1,1};
-    int target = 3;
-
-    cout << test.findTargetSumWays(nums, target) << endl;
+    string digits = "23";
+    vector<string> result = test.letterCombinations(digits);
+    for (const string &s : result) {
+        cout << s << " ";
+    }
 }

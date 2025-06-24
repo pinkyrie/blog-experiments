@@ -32,10 +32,11 @@ private:
             return;
         }
         
-        if (idx < s.size()- 1) {
-            // 考虑 i+1 后面的逗号怎么选
-            dfs(res, current, s, start, idx + 1);
-        }
+        // if (idx < s.size()- 1) {
+        //     // 考虑 i+1 后面的逗号怎么选
+        //     dfs(res, current, s, start, idx + 1);
+        // }
+        dfs(res, current, s, start, idx + 1);
 
         if(isPalindrome(s, start, idx)) {
             current.push_back(s.substr(start, idx - start + 1)); // 选当前字符

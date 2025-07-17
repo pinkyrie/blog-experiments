@@ -10,42 +10,44 @@
 using namespace std;
 class Solution {
 private:
-    void dfs(vector<string>& result,
-        string& current, int left, int right, int n) {
-        if(current.size() == n * 2 && left == right) {
+    void dfs(vector<vector<int>>& result,
+        vector<int>& current, int idx, int pos, int set_nums, const vector<int>& nums) {
+        if(result.size() == set_nums) {
+            return; // 所有排列已生成
+        }
+        if (current.size() == nums.size()) {
             result.push_back(current);
             return;
         }
-        if(left >= right) {
-            if(left < n) {
-                current.push_back('(');
-                dfs(result, current, left + 1, right, n);
-                current.pop_back(); // 回溯
-            }
-            if(right < n) {
-                current.push_back(')');
-                dfs(result, current, left, right + 1, n);
-                current.pop_back(); // 回溯
-            }
+
+        for(int i = pos; i < nums.size(); i++) {
+            current[i] = nums[idx]; // 选择当前数字
+            dfs(result, current, idx + 1, pos + 1, set_nums, nums);
 
         }
     }
 public:
-    vector<string> generateParenthesis(int n) {
-        int len = 2 * n; // 每个括号对包含两个括号
-        vector<string> result;
-        string current;
-        dfs(result, current, 0, 0, n);
-        return result;
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> result;
+        vector<int> current;
+
+        int len = nums.size();
+        int set_nums = 1;
+        for(int i = 1; i <= len; i++) {
+            set_nums *= i; // 计算排列数
+        }
 
     }
 };
 
 int main() {
     Solution test;
-    int n = 3;
-    vector<string> result = test.generateParenthesis(n);
-    for (const string &s : result) {
-        cout << s << " ";
+    vector<int> nums = {1, 2, 3};
+    vector<vector<int>> result = test.permute(nums);
+    for (const auto& permutation : result) {
+        for (int num : permutation) {
+            cout << num << " ";
+        }
+        cout << endl;
     }
 }
